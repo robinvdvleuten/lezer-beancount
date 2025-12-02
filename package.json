@@ -7,9 +7,12 @@
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
+    "types": "./dist/index.d.ts",
     "import": "./dist/index.js",
-    "require": "./dist/index.cjs"
+    "require": "./dist/index.cjs",
+    "default": "./dist/index.js"
   },
   "scripts": {
     "build": "lezer-generator src/beancount.grammar -o src/parser && rollup -c",
