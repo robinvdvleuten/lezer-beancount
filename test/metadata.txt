@@ -1,0 +1,74 @@
+# Directive with metadata
+
+2024-01-01 open Assets:Bank USD
+  name: "Checking Account"
+
+==>
+
+File(DatedDirective(Date,Open(open,Account,Currency,MetadataBlock(
+  DirectiveMetadata(Indent,MetadataKey,":",String)))))
+
+# Transaction with metadata
+
+2024-01-01 * "Test"
+  category: "food"
+  Expenses:Food 10 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,String,PostingBlock(
+  TransactionMetadata(Indent,MetadataKey,":",String),
+  Posting(Indent,Account,Amount(Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Metadata with number value
+
+2024-01-01 open Assets:Bank USD
+  priority: 1
+
+==>
+
+File(DatedDirective(Date,Open(open,Account,Currency,MetadataBlock(
+  DirectiveMetadata(Indent,MetadataKey,":",Number)))))
+
+# Metadata with boolean value
+
+2024-01-01 open Assets:Bank USD
+  active: TRUE
+
+==>
+
+File(DatedDirective(Date,Open(open,Account,Currency,MetadataBlock(
+  DirectiveMetadata(Indent,MetadataKey,":",BooleanValue)))))
+
+# Metadata with account value
+
+2024-01-01 open Assets:Bank USD
+  linked: Equity:Opening
+
+==>
+
+File(DatedDirective(Date,Open(open,Account,Currency,MetadataBlock(
+  DirectiveMetadata(Indent,MetadataKey,":",Account)))))
+
+# Metadata with date value
+
+2024-01-01 open Assets:Bank USD
+  opened: 2024-01-01
+
+==>
+
+File(DatedDirective(Date,Open(open,Account,Currency,MetadataBlock(
+  DirectiveMetadata(Indent,MetadataKey,":",Date)))))
+
+# Metadata with tag value
+
+2024-01-01 open Assets:Bank USD
+  category: #savings
+
+==>
+
+File(DatedDirective(Date,Open(open,Account,Currency,MetadataBlock(
+  DirectiveMetadata(Indent,MetadataKey,":",Tag)))))
+

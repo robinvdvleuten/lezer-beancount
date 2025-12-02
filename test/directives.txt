@@ -1,0 +1,112 @@
+# Open directive
+
+2024-01-01 open Assets:Bank USD
+
+==>
+
+File(DatedDirective(Date,Open(open,Account,Currency)))
+
+# Open with multiple currencies
+
+2024-01-01 open Assets:Bank USD,EUR
+
+==>
+
+File(DatedDirective(Date,Open(open,Account,Currency,Currency)))
+
+# Close directive
+
+2024-12-31 close Assets:Bank
+
+==>
+
+File(DatedDirective(Date,Close(close,Account)))
+
+# Balance directive
+
+2024-01-15 balance Assets:Bank 1000.00 USD
+
+==>
+
+File(DatedDirective(Date,Balance(balance,Account,Number,Currency)))
+
+# Balance with tolerance
+
+2024-01-15 balance Assets:Bank 1000.00 ~ 0.01 USD
+
+==>
+
+File(DatedDirective(Date,Balance(balance,Account,Number,"~",Number,Currency)))
+
+# Pad directive
+
+2024-01-01 pad Assets:Bank Equity:Opening
+
+==>
+
+File(DatedDirective(Date,Pad(pad,Account,Account)))
+
+# Note directive
+
+2024-02-01 note Assets:Bank "Called customer service"
+
+==>
+
+File(DatedDirective(Date,Note(note,Account,String)))
+
+# Document directive
+
+2024-03-01 document Assets:Bank "/path/to/file.pdf"
+
+==>
+
+File(DatedDirective(Date,Document(document,Account,String)))
+
+# Event directive
+
+2024-01-01 event "location" "New York"
+
+==>
+
+File(DatedDirective(Date,Event(event,String,String)))
+
+# Price directive
+
+2024-01-01 price USD 0.92 EUR
+
+==>
+
+File(DatedDirective(Date,Price(price,Currency,Amount(Number,Currency))))
+
+# Commodity directive
+
+2024-01-01 commodity USD
+
+==>
+
+File(DatedDirective(Date,Commodity(commodity,Currency)))
+
+# Query directive
+
+2024-01-01 query "report" "SELECT account, sum(position)"
+
+==>
+
+File(DatedDirective(Date,Query(query,String,String)))
+
+# Custom directive
+
+2024-01-01 custom "budget" "monthly"
+
+==>
+
+File(DatedDirective(Date,Custom(custom,String,String)))
+
+# Custom with account and amount
+
+2024-01-01 custom "budget" Expenses:Food 500 USD
+
+==>
+
+File(DatedDirective(Date,Custom(custom,String,Account,Number,Currency)))
+

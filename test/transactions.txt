@@ -1,0 +1,108 @@
+# Simple transaction with star flag
+
+2024-01-01 * "Payee" "Narration"
+  Expenses:Food 10 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,String,String,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Transaction with exclamation flag
+
+2024-01-01 ! "Pending"
+  Expenses:Food 10 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,String,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Transaction with txn keyword
+
+2024-01-01 txn "Test"
+  Expenses:Food 10 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnKeyword,String,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Transaction with uppercase letter flag
+
+2024-01-01 P "Payment"
+  Expenses:Food 10 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,String,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Transaction without strings
+
+2024-01-01 *
+  Expenses:Food 10 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Transaction with single string
+
+2024-01-01 * "Payee Only"
+  Expenses:Food 10 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,String,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Transaction with tags
+
+2024-01-01 * "Test" #trip #vacation
+  Expenses:Food 10 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,String,Tag,Tag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Transaction with links
+
+2024-01-01 * "Test" ^invoice-123
+  Expenses:Food 10 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,String,Link,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Transaction with tags and links
+
+2024-01-01 * "Test" #trip ^invoice-123
+  Expenses:Food 10 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,String,Tag,Link,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency)),
+  Posting(Indent,Account)))))
+

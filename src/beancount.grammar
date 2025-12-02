@@ -1,0 +1,324 @@
+// Beancount Lezer Grammar
+// Following official Beancount syntax specification
+// Reference: https://beancount.github.io/docs/beancount_language_syntax.html
+
+@top File { item* }
+
+item {
+  DatedDirective |
+  UndatedDirective |
+  OrgHeader
+}
+
+// ============================================================================
+// Dated Directives (all start with Date)
+// ============================================================================
+
+DatedDirective {
+  Date (
+    Transaction |
+    Open |
+    Close |
+    Balance |
+    Pad |
+    Note |
+    Document |
+    Event |
+    Price |
+    Commodity |
+    Query |
+    Custom
+  )
+}
+
+// Transaction: Date Flag "Payee" "Narration" #tags ^links
+Transaction {
+  txnFlag txnStrings? tagsLinks? PostingBlock?
+}
+
+txnFlag { TxnKeyword | TxnFlag }
+txnStrings { String String? }
+tagsLinks { (Tag | Link)+ }
+
+// Posting block contains all postings and transaction-level metadata
+PostingBlock { (Posting | TransactionMetadata)+ }
+
+// Posting: indented Account Amount? CostSpec? PriceAnnotation? #tags ^links
+Posting {
+  Indent Account postingAmount? tagsLinks?
+}
+
+TransactionMetadata { Indent MetadataKey ":" metadataValue }
+
+postingAmount { Amount CostSpec? PriceAnnotation? }
+
+Amount { numberExpr Currency }
+
+numberExpr {
+  Number |
+  "(" numberExpr ")" |
+  numberExpr !arith ArithOp numberExpr
+}
+
+// Cost specifications: {}, {100 USD}, {{100 USD}}, {100 USD, 2024-01-01, "label"}
+CostSpec {
+  "{" costSpecContents? "}" |
+  "{{" costSpecContents? "}}"
+}
+
+costSpecContents {
+  costSpecItem ("," costSpecItem)*
+}
+
+costSpecItem {
+  Amount |
+  Date |
+  String |
+  LotLabel |
+  CostMerge
+}
+
+// Lot label: # followed by optional string
+LotLabel { "#" String? }
+CostMerge { ArithMult }
+
+// Price annotations: @ 1.20 EUR, @@ 120 EUR
+PriceAnnotation {
+  PriceOp Amount
+}
+
+PriceOp { "@" | "@@" }
+
+// Open: Date open Account Currency,Currency... "booking"
+Open {
+  kw<"open"> Account currencyList? bookingMethod? MetadataBlock?
+}
+
+currencyList { Currency ("," Currency)* }
+bookingMethod { String }
+
+// Close: Date close Account
+Close {
+  kw<"close"> Account MetadataBlock?
+}
+
+// Balance: Date balance Account NUMBER ~ TOLERANCE CURRENCY
+Balance {
+  kw<"balance"> Account balanceAmount MetadataBlock?
+}
+
+balanceAmount { Number tolerance? Currency }
+tolerance { "~" Number }
+
+// Pad: Date pad Account Account
+Pad {
+  kw<"pad"> Account Account MetadataBlock?
+}
+
+// Note: Date note Account "description"
+Note {
+  kw<"note"> Account String MetadataBlock?
+}
+
+// Document: Date document Account "/path/to/file" #tags ^links
+Document {
+  kw<"document"> Account String tagsLinks? MetadataBlock?
+}
+
+// Event: Date event "type" "value"
+Event {
+  kw<"event"> String String MetadataBlock?
+}
+
+// Price: Date price Currency Amount
+Price {
+  kw<"price"> Currency Amount MetadataBlock?
+}
+
+// Commodity: Date commodity Currency
+Commodity {
+  kw<"commodity"> Currency MetadataBlock?
+}
+
+// Query: Date query "name" "query-string"
+Query {
+  kw<"query"> String String MetadataBlock?
+}
+
+// Custom: Date custom "type" values...
+Custom {
+  kw<"custom"> String customValue* MetadataBlock?
+}
+
+// Custom values
+customValue {
+  String | Number | Account | Currency | BooleanValue
+}
+
+// Metadata block for directives
+MetadataBlock { DirectiveMetadata+ }
+DirectiveMetadata { Indent MetadataKey ":" metadataValue }
+
+// ============================================================================
+// Undated Directives
+// ============================================================================
+
+UndatedDirective {
+  Option |
+  Include |
+  Plugin |
+  Pushtag |
+  Poptag
+}
+
+// option "name" "value"
+Option {
+  kw<"option"> String String
+}
+
+// include "path/to/file.beancount"
+Include {
+  kw<"include"> String
+}
+
+// plugin "module.path" "config"
+Plugin {
+  kw<"plugin"> String String?
+}
+
+// pushtag #tag
+Pushtag {
+  kw<"pushtag"> Tag
+}
+
+// poptag #tag
+Poptag {
+  kw<"poptag"> Tag
+}
+
+// ============================================================================
+// Metadata
+// ============================================================================
+
+MetadataKey { identifier }
+
+metadataValue {
+  String |
+  Number |
+  Account |
+  Currency |
+  Date |
+  Tag |
+  BooleanValue
+}
+
+// ============================================================================
+// Org-mode Section Headers
+// ============================================================================
+
+OrgHeader {
+  OrgMarker
+}
+
+// ============================================================================
+// Tokens
+// ============================================================================
+
+@tokens {
+  // Date: YYYY-MM-DD (must be before Number for precedence)
+  Date { @digit @digit @digit @digit "-" @digit @digit "-" @digit @digit }
+
+  // Number: optional sign, digits with optional comma separators, optional decimal
+  Number {
+    "-"? @digit (@digit | ",")* ("." @digit+)?
+  }
+
+  // String: double-quoted with escape sequences
+  String[isolate] { '"' char* '"' }
+  char { $[\u{20}\u{21}\u{23}-\u{5b}\u{5d}-\u{10ffff}] | "\\" esc }
+  esc { $["\\\/bfnrt] | "u" hex hex hex hex | "\n" }
+  hex { $[0-9a-fA-F] }
+
+  // Account: Root type followed by colon-separated segments
+  // Roots: Assets, Liabilities, Equity, Income, Expenses
+  // Segments: must START with uppercase letter or digit, can CONTAIN letters, digits, dashes
+  Account {
+    ("Assets" | "Liabilities" | "Equity" | "Income" | "Expenses")
+    (":" accountSegment)+
+  }
+  accountSegment { $[A-Z0-9] $[A-Za-z0-9\-]* }
+
+  // Currency/Commodity: uppercase identifier (1-24 chars)
+  // Can contain: A-Z, 0-9, ', ., _, -
+  Currency { $[A-Z] $[A-Z0-9'._\-]* }
+
+  // Transaction flag: *, !, or single uppercase letter
+  TxnFlag { "*" | "!" | $[A-Z] }
+
+  // Tag: #name
+  Tag { "#" tagLinkName }
+
+  // Link: ^name
+  Link { "^" tagLinkName }
+
+  tagLinkName { $[a-zA-Z0-9] $[a-zA-Z0-9\-_]* }
+
+  // Identifier for keywords and metadata keys
+  identifier { $[a-z] $[a-z0-9\-_]* }
+
+  // Boolean values for metadata
+  BooleanValue { "TRUE" | "FALSE" }
+
+  // Transaction keyword
+  TxnKeyword { "txn" }
+
+  // Arithmetic operators
+  ArithOp { "+" | "-" | "/" | "*" }
+
+  // Org-mode header marker (one or more stars followed by space and text until newline)
+  OrgMarker[isolate] { "*"+ $[ \t] ![\n]* }
+
+  // Comment: semicolon to end of line
+  LineComment[isolate] { ";" ![\n]* }
+
+  // Whitespace (not newlines - those are significant)
+  space { $[ \t]+ }
+
+  // Newline
+  newline { $[\n\r]+ }
+
+  // Indentation (newline followed by whitespace)
+  Indent { $[\n\r]+ $[ \t]+ }
+
+  // Multiplication (separate from ArithOp for cost merge)
+  ArithMult { "*" }
+
+  // Delimiters
+  "{" "}" "{{" "}}" "(" ")" "," ":" "~" "@" "@@"
+
+  // Precedence: more specific patterns first
+  // TxnFlag needs to be before Currency so single letters like P are parsed as flags
+  @precedence { Account, BooleanValue, TxnFlag, Currency }
+  @precedence { TxnKeyword, identifier }
+  @precedence { "{{", "{" }
+  @precedence { "}}", "}" }
+  @precedence { "@@", "@" }
+  @precedence { Indent, newline, space }
+  @precedence { OrgMarker, ArithMult }
+  @precedence { ArithOp, ArithMult }
+  @precedence { Date, Number }
+}
+
+// Keywords
+kw<term> { @specialize[@name={term}]<identifier, term> }
+
+@precedence {
+  arith @left
+}
+
+// Skip whitespace and comments
+@skip { space | newline | LineComment }
+
+@external propSource beancountHighlighting from "./highlight.js"
+
+@detectDelim
