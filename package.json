@@ -19,7 +19,7 @@
     "@lezer/generator": "^1.8.0",
     "@lezer/highlight": "^1.2.0",
     "@lezer/lr": "^1.4.0",
-    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "rollup": "^4.53.3",
     "uvu": "^0.5.6"
   },
