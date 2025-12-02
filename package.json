@@ -1,0 +1,45 @@
+{
+  "name": "lezer-beancount",
+  "version": "1.0.0",
+  "description": "lezer-based Beancount grammar",
+  "license": "MIT",
+  "author": "Robin van der Vleuten <robin@webstronauts.com>",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs"
+  },
+  "scripts": {
+    "build": "lezer-generator src/beancount.grammar -o src/parser && rollup -c",
+    "test": "uvu test"
+  },
+  "devDependencies": {
+    "@lezer/generator": "^1.8.0",
+    "@lezer/highlight": "^1.2.0",
+    "@lezer/lr": "^1.4.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "rollup": "^4.53.3",
+    "uvu": "^0.5.6"
+  },
+  "peerDependencies": {
+    "@lezer/highlight": "^1.0.0",
+    "@lezer/lr": "^1.0.0"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/robinvdvleuten/lezer-beancount.git"
+  },
+  "keywords": [
+    "lezer",
+    "grammar",
+    "beancount",
+    "parser",
+    "double-entry",
+    "accounting"
+  ]
+}

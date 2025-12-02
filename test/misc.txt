@@ -1,0 +1,49 @@
+# Org-mode header
+
+* Section Title
+
+==>
+
+File(OrgHeader(OrgMarker))
+
+# Multiple org-mode headers
+
+* Section 1
+
+** Subsection
+
+==>
+
+File(OrgHeader(OrgMarker),OrgHeader(OrgMarker))
+
+# Unicode in strings
+
+2024-01-01 * "日本食" "東京"
+  Expenses:Food 1000 JPY
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,String,String,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Currency with special characters
+
+2024-01-01 price VWCE.AS 100 EUR
+
+==>
+
+File(DatedDirective(Date,Price(price,Currency,Amount(Number,Currency))))
+
+# Multiple directives
+
+2024-01-01 open Assets:Bank USD
+2024-01-02 open Expenses:Food USD
+
+==>
+
+File(
+  DatedDirective(Date,Open(open,Account,Currency)),
+  DatedDirective(Date,Open(open,Account,Currency)))
+

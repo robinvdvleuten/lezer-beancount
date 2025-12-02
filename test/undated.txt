@@ -1,0 +1,48 @@
+# Option directive
+
+option "title" "My Ledger"
+
+==>
+
+File(UndatedDirective(Option(option,String,String)))
+
+# Include directive
+
+include "accounts.beancount"
+
+==>
+
+File(UndatedDirective(Include(include,String)))
+
+# Plugin directive
+
+plugin "beancount.plugins.auto"
+
+==>
+
+File(UndatedDirective(Plugin(plugin,String)))
+
+# Plugin with config
+
+plugin "beancount.plugins.check" "config"
+
+==>
+
+File(UndatedDirective(Plugin(plugin,String,String)))
+
+# Pushtag directive
+
+pushtag #trip
+
+==>
+
+File(UndatedDirective(Pushtag(pushtag,Tag)))
+
+# Poptag directive
+
+poptag #trip
+
+==>
+
+File(UndatedDirective(Poptag(poptag,Tag)))
+

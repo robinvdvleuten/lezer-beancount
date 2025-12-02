@@ -1,0 +1,120 @@
+# Posting with simple cost
+
+2024-01-01 *
+  Assets:Stock 10 AAPL {150 USD}
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency),CostSpec(Amount(Number,Currency))),
+  Posting(Indent,Account)))))
+
+# Posting with empty cost
+
+2024-01-01 *
+  Assets:Stock -10 AAPL {}
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency),CostSpec),
+  Posting(Indent,Account)))))
+
+# Posting with total cost
+
+2024-01-01 *
+  Assets:Stock 10 AAPL {{1500 USD}}
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency),CostSpec(Amount(Number,Currency))),
+  Posting(Indent,Account)))))
+
+# Posting with cost and date
+
+2024-01-01 *
+  Assets:Stock 10 AAPL {150 USD, 2024-01-01}
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency),CostSpec(Amount(Number,Currency),Date)),
+  Posting(Indent,Account)))))
+
+# Posting with cost and label
+
+2024-01-01 *
+  Assets:Stock 10 AAPL {150 USD, "lot1"}
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency),CostSpec(Amount(Number,Currency),String)),
+  Posting(Indent,Account)))))
+
+# Posting with lot label match
+
+2024-01-01 *
+  Assets:Stock -10 AAPL {# "lot1"}
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency),CostSpec(LotLabel(String))),
+  Posting(Indent,Account)))))
+
+# Posting with per-unit price
+
+2024-01-01 *
+  Assets:Cash 100 EUR @ 1.08 USD
+  Assets:Bank
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency),PriceAnnotation(PriceOp,Amount(Number,Currency))),
+  Posting(Indent,Account)))))
+
+# Posting with total price
+
+2024-01-01 *
+  Assets:Cash 100 EUR @@ 108 USD
+  Assets:Bank
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency),PriceAnnotation(PriceOp,Amount(Number,Currency))),
+  Posting(Indent,Account)))))
+
+# Posting with cost and price
+
+2024-01-01 *
+  Assets:Stock -10 AAPL {150 USD} @ 180 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency),CostSpec(Amount(Number,Currency)),PriceAnnotation(PriceOp,Amount(Number,Currency))),
+  Posting(Indent,Account)))))
+
+# Posting with tags
+
+2024-01-01 *
+  Expenses:Food 10 USD #lunch
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency),Tag),
+  Posting(Indent,Account)))))
+

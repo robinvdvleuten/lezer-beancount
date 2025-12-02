@@ -1,0 +1,72 @@
+# Amount with addition
+
+2024-01-01 *
+  Expenses:Food 10 + 5 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,ArithOp,Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Amount with subtraction
+
+2024-01-01 *
+  Expenses:Food 20 - 5 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,ArithOp,Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Amount with multiplication
+
+2024-01-01 *
+  Expenses:Food 10 * 2 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,ArithOp,Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Amount with division
+
+2024-01-01 *
+  Expenses:Food 100 / 4 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,ArithOp,Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Amount with parentheses
+
+2024-01-01 *
+  Expenses:Food (10 + 5) * 2 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,ArithOp,Number,ArithOp,Number,Currency)),
+  Posting(Indent,Account)))))
+
+# Number with commas
+
+2024-01-01 *
+  Expenses:Food 1,234.56 USD
+  Assets:Cash
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,PostingBlock(
+  Posting(Indent,Account,Amount(Number,Currency)),
+  Posting(Indent,Account)))))
+
