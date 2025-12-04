@@ -36,7 +36,7 @@ Transaction {
   txnFlag txnStrings? tagsLinks? PostingBlock?
 }
 
-txnFlag { TxnKeyword | TxnFlag }
+txnFlag { TxnKeyword | TxnFlag ~txn }
 txnStrings { String String? }
 tagsLinks { (Tag | Link)+ }
 
@@ -50,7 +50,7 @@ Posting {
 
 TransactionMetadata { Indent MetadataKey ":" metadataValue }
 
-postingAmount { Amount CostSpec? PriceAnnotation? }
+postingAmount { Amount ~amount CostSpec? PriceAnnotation? }
 
 Amount { numberExpr Currency }
 
@@ -310,7 +310,7 @@ OrgHeader {
 }
 
 // Keywords
-kw<term> { @specialize[@name={term}]<identifier, term> }
+kw<term> { @specialize[@name={term}]<identifier, term> ~directive }
 
 @precedence {
   arith @left

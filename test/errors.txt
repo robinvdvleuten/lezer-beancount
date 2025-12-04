@@ -1,0 +1,34 @@
+# Transaction without postings
+
+2024-01-01 * "Test"
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,String)))
+
+# Posting without amount
+
+2024-01-01 * "Test"
+  Assets:Bank
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,String,PostingBlock(Posting(Indent,Account)))))
+
+# Multiple postings without amounts
+
+2024-01-01 * "Test"
+  Assets:Bank
+  Expenses:Food
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag,String,PostingBlock(Posting(Indent,Account),Posting(Indent,Account)))))
+
+# Transaction with only flag
+
+2024-01-01 *
+
+==>
+
+File(DatedDirective(Date,Transaction(TxnFlag)))
