@@ -52,6 +52,4 @@ export const beancountHighlighting = styleTags({
   OrgHeader: t.heading,
   OrgMarker: t.heading,
 
-  // Indent (for structure)
-  Indent: t.indent,
 });
