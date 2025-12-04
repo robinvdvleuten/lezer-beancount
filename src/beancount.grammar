@@ -320,5 +320,6 @@ kw<term> { @specialize[@name={term}]<identifier, term> ~directive }
 @skip { space | newline | LineComment }
 
 @external propSource beancountHighlighting from "./highlight.js"
+@external propSource beancountFolding from "./highlight.js"
 
 @detectDelim

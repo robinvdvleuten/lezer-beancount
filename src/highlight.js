@@ -1,6 +1,5 @@
-/* Syntax highlighting for Beancount */
-
 import { styleTags, tags as t } from "@lezer/highlight";
+import { foldNodeProp, foldInside } from "@codemirror/language";
 
 export const beancountHighlighting = styleTags({
   // Comments
@@ -48,8 +47,11 @@ export const beancountHighlighting = styleTags({
   ":": t.punctuation,
   "@ @@": t.operator,
 
-  // Org-mode headers
   OrgHeader: t.heading,
   OrgMarker: t.heading,
+});
 
+export const beancountFolding = foldNodeProp.add({
+  PostingBlock: foldInside,
+  MetadataBlock: foldInside,
 });
