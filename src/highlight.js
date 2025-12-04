@@ -1,5 +1,5 @@
 import { styleTags, tags as t } from "@lezer/highlight";
-import { foldNodeProp, foldInside } from "@codemirror/language";
+import { foldNodeProp, foldInside, indentNodeProp } from "@codemirror/language";
 
 export const beancountHighlighting = styleTags({
   // Comments
@@ -54,4 +54,21 @@ export const beancountHighlighting = styleTags({
 export const beancountFolding = foldNodeProp.add({
   PostingBlock: foldInside,
   MetadataBlock: foldInside,
+});
+
+export const beancountIndentation = indentNodeProp.add({
+  Transaction: context => context.baseIndent + context.unit,
+  PostingBlock: context => context.baseIndent + context.unit,
+  MetadataBlock: context => context.baseIndent + context.unit,
+  Open: context => context.baseIndent + context.unit,
+  Close: context => context.baseIndent + context.unit,
+  Balance: context => context.baseIndent + context.unit,
+  Pad: context => context.baseIndent + context.unit,
+  Note: context => context.baseIndent + context.unit,
+  Document: context => context.baseIndent + context.unit,
+  Event: context => context.baseIndent + context.unit,
+  Price: context => context.baseIndent + context.unit,
+  Commodity: context => context.baseIndent + context.unit,
+  Query: context => context.baseIndent + context.unit,
+  Custom: context => context.baseIndent + context.unit,
 });

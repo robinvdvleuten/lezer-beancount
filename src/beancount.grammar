@@ -321,5 +321,6 @@ kw<term> { @specialize[@name={term}]<identifier, term> ~directive }
 
 @external propSource beancountHighlighting from "./highlight.js"
 @external propSource beancountFolding from "./highlight.js"
+@external propSource beancountIndentation from "./highlight.js"
 
 @detectDelim
