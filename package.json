@@ -1,6 +1,6 @@
 {
   "name": "lezer-beancount",
-  "version": "1.0.0",
+  "version": "0.0.0-semantically-released",
   "description": "lezer-based Beancount grammar",
   "license": "MIT",
   "author": "Robin van der Vleuten <robin@webstronauts.com>",
