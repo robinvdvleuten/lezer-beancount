@@ -10,7 +10,7 @@ updates:
     labels:
       - "dependencies"
     commit-message:
-      prefix: "feat"
+      prefix: "chore"
       include: "scope"
 
   - package-ecosystem: "github-actions"
@@ -22,5 +22,5 @@ updates:
     labels:
       - "dependencies"
     commit-message:
-      prefix: "chore"
+      prefix: "ci"
       include: "scope"
